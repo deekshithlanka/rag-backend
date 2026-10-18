@@ -6,8 +6,9 @@ Docs:   http://localhost:8001/docs   (try every endpoint in the browser)
 
 Endpoints:
   GET  /health   -> {"status": "ok"}                     is the server running?
-  POST /chat     -> {"messages": [{"role": "user", "content": "..."}]}
-                    returns {"text": "...", "sources": [{"source": "x.pdf", "page": 3}]}
+  POST /chat     -> {"messages": [{"role": "user", "content": "..."}], "rerank": true}
+                    returns {"text": "...", "reranked": true,
+                             "sources": [{"source": "x.pdf", "page": 3, "score": 0.91, "chunks": 1}]}
   POST /ingest   -> upload a PDF (form field "file")
                     returns {"filename": "...", "pages": 5, "chunks": 5}
 
@@ -52,6 +53,7 @@ class Message(BaseModel):
 
 class ChatRequest(BaseModel):
     messages: List[Message] = Field(min_length=1, max_length=100)
+    rerank: bool = True  # rescore the 20 hybrid-search candidates and keep the best 5
 
 
 # ---------- Endpoints ----------
@@ -68,7 +70,7 @@ def chat(request: ChatRequest):
         raise HTTPException(400, "No user message found")
     try:
         with db_lock:
-            return rag.answer_question(question)
+            return rag.answer_question(question, rerank=request.rerank)
     except Exception as e:
         msg = str(e)
         if "429" in msg or "RESOURCE_EXHAUSTED" in msg:
