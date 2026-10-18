@@ -5,3 +5,4 @@ qdrant_data/
 docs/*.pdf
 *_output.txt
 server_log.txt
+lightrag_data/

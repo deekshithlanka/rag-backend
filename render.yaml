@@ -1,0 +1,25 @@
+# Render Blueprint: Render reads this to create the RAG server (free plan).
+# Secrets marked sync: false are typed in on Render's website, never stored in GitHub.
+services:
+  - type: web
+    name: rag-backend
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: GOOGLE_API_KEY        # same Gemini key as on your Mac
+        sync: false
+      - key: QDRANT_URL            # from Qdrant Cloud
+        sync: false
+      - key: QDRANT_API_KEY
+        sync: false
+      - key: MONGO_URI             # from MongoDB Atlas
+        sync: false
+      - key: RAG_API_KEY           # password the chat app must send; Render generates it
+        generateValue: true
+      - key: RERANK_MODEL          # smaller reranker to fit in 512 MB
+        value: Xenova/ms-marco-MiniLM-L-6-v2
+      - key: HF_HUB_DISABLE_XET
+        value: "1"
