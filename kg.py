@@ -193,7 +193,7 @@ async def answer_question(question: str, history: list) -> dict:
     from lightrag import QueryParam
 
     rag = await get_rag()
-    param = QueryParam(mode="hybrid", conversation_history=history[-6:])
+    param = QueryParam(mode="hybrid", conversation_history=history[-6:], enable_rerank=False)
     text = await rag.aquery(question, param=param)
     text = text if isinstance(text, str) else str(text)
 
