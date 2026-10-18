@@ -1,0 +1,10 @@
+langchain-core
+langchain-google-genai
+langchain-qdrant
+langchain-text-splitters
+qdrant-client
+pypdf
+python-dotenv
+fastapi
+uvicorn
+python-multipart
