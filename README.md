@@ -4,6 +4,21 @@ Python FastAPI service behind the [Gemini RAG Assistant](https://github.com/deek
 (live: https://gemini-ai-chat-coral.vercel.app). It turns PDFs into searchable knowledge and answers questions
 with page citations, using two retrieval modes: a **vector database** and a **knowledge graph**.
 
+## Tech Stack
+
+This repo is one half of a two-part system: a **Next.js frontend** ([Gemini-AI-Chat](https://github.com/deekshithlanka/Gemini-AI-Chat)) and a **Python RAG backend** ([rag-backend](https://github.com/deekshithlanka/rag-backend)).
+
+👉 **You are here: Backend**
+
+| Layer | Technology | Role |
+|---|---|---|
+| **Frontend** | Next.js · TypeScript · Tailwind · Vercel | Chat UI, streaming answers, PDF upload, voice in/out |
+| **Backend** | Python · FastAPI · LangChain · Render | PDF ingestion, hybrid search, reranking, cited answers |
+| **LLM** | Google Gemini | Chat, embeddings, answer generation, entity extraction |
+| **Vector Database** | Qdrant Cloud | Dense (Gemini) + sparse (BM25) hybrid retrieval |
+| **Knowledge Graph** | LightRAG · MongoDB Atlas | Entity and relationship graph for multi-hop questions |
+| **Security** | Prompt Guard 2 (Groq) · Gemini safety checks | Jailbreak and prompt-injection detection on input and output |
+
 ## Architecture
 
 ```mermaid
